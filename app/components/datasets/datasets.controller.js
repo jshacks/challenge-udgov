@@ -36,7 +36,7 @@
             }
 
             $http
-                .get('http://localhost:8001/api/document/' + document.id, {
+                .get('http://192.168.2.255:8001/api/document/' + document.id, {
                     params: {
                         url: document.romania_download_url,
                         format: document.format
@@ -45,8 +45,14 @@
                 .then(function (response) {
                     $mdDialog.show({
                         template:
-                            '<div>' +
-                                '<pre>{{ json }}</pre>' +
+                            '<div class="pop-up">' +
+                                '<div class="header-title" >'+
+                                    '<div class="end-point-label">' + 'GET' + '</div>'+
+                                    '<div class="end-point-info">' +' http://192.168.2.255:8001/api/document/' + document.id + '</div>'+
+                                '</div>'+
+                                '<div class="json-parsed">'+
+                                    '<pre>{{ json }}</pre>' +
+                                '</div>'+
                             '</div>',
                         locals: {
                             json: JSON.stringify(response.data, undefined, 2)
@@ -87,7 +93,7 @@
             ];
 
             $http
-                .get('http://localhost:8001/api/datasets')
+                .get('http://192.168.2.255:8001/api/datasets')
                 .then(function (response) {
                     _self.data.datasets = response.data.results;
                     setActiveDataset(_self.data.datasets[0]);
