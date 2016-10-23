@@ -38,34 +38,27 @@
             $http
                 .get('http://localhost:8001/api/document/' + document.id, {
                     params: {
-                        url: document.download_url,
+                        url: document.romania_download_url,
                         format: document.format
                     }
                 })
                 .then(function (response) {
-                    // $mdDialog.show({
-                    //     template:
-                    //     '<div>' +
-                    //         '{{ ctrl.data }}' +
-                    //     '</div>',
-                    //     locals: {
-                    //         data: response.data
-                    //     },
-                    //     bindToController: true,
-                    //     controllerAs: 'ctrl',
-                    //     controller: 'DialogController',
-                    //     targetEvent: event,
-                    //     clickOutsideToClose: true
-                    // });
+                    $mdDialog.show({
+                        template:
+                            '<div>' +
+                                '<pre>{{ json }}</pre>' +
+                            '</div>',
+                        locals: {
+                            json: JSON.stringify(response.data, undefined, 2)
+                        },
+                        controller: DialogController,
+                        targetEvent: event
+                    });
 
-                    $mdDialog.show(
-                        $mdDialog.alert()
-                            .clickOutsideToClose(true)
-                            .title('Done')
-                            .textContent(response.data)
-                            .ok('Got it!')
-                            .targetEvent(event)
-                    );
+                    DialogController.$inject = ['$scope', 'json'];
+                    function DialogController($scope, json) {
+                        $scope.json = json;
+                    }
                 });
         }
 
@@ -77,12 +70,12 @@
 
         function init() {
             _self.data.datasetInfo = [
+                'title',
+                'notes',
+                'licence_title',
                 'author',
                 'author_email',
-                'licence_title',
                 'maintainer',
-                'notes',
-                'title',
                 'resources_number'
             ];
 

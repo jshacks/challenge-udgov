@@ -12,7 +12,51 @@ div.dataset-files {
     overflow-y: auto;
 }
 
-div.datasets,
+div.datasets {
+    width: 20%;
+    background: rgba(45, 45, 45, 1);
+}
+
 div.dataset-info {
-    width: 200px;
+    width: 30%;
+    background: #3d3a3a;
+    padding: 25px;
+}
+
+div.info-row {
+    margin-bottom: 15px;
+}
+
+div.info-label {
+    margin-bottom: 5px;
+}
+
+body {
+    background: #4b4a4a;
+    color: #ccc8c8;
+}
+
+::-webkit-scrollbar {
+    width: 12px;
+}
+
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    background: #626066;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
+    background: #262626;
+}
+
+md-toolbar.md-default-theme:not(.md-menu-toolbar), md-toolbar:not(.md-menu-toolbar) {
+    background-color: rgb(63, 81, 181);
+    color: rgba(255, 255, 255, 0.87);
+}
+
+md-toolbar {
+    min-height: 0;
 }
