@@ -1,0 +1,29 @@
+<section id="datasets-page" layout="row"
+         ng-controller="DatasetsController as dVM"
+         ng-init="dVM.watchers.init()">
+
+    <div class="datasets">
+        <md-toolbar>
+            <input type="search" ng-model="dVM.data.searchParam" />
+        </md-toolbar>
+        <ul>
+            <li ng-repeat="dataset in dVM.data.datasets | filter:{'name': dVM.data.searchParam}" ng-click="dVM.actions.setActiveDataset(dataset)">
+                {{ dataset.title }}
+            </li>
+        </ul>
+    </div>
+
+    <div class="dataset-info">
+        <div class="info-row" ng-repeat="info in dVM.data.datasetInfo">
+            <div class="info-label">{{ info }}</div>
+            <div class="info-data">{{ dVM.data.activeDataset[info] }}</div>
+        </div>
+    </div>
+
+    <div class="dataset-files" flex>
+        <ul ng-repeat="resource in dVM.data.activeDataset.resources">
+            <li ng-click="dVM.actions.getDocumentData(resource, $event)">{{ resource.format }} - {{ resource.name }}</li>
+        </ul>
+    </div>
+
+</section>

@@ -12,7 +12,7 @@
     "release": "echo \"Error: release system is not configured\" && exit 1",
     "lint": "echo \"Error: linting system is not configured\" && exit 1",
     "build": "echo \"Error: build system is not configured\" && exit 1",
-    "bump-version": "echo \"Error: bump-version system is not configured\" && exit 1",
+    "bump-version": "echo \"Error: bump-version system is not configured\" && exit 1"
   },
   "repository": {
     "type": "git",
@@ -30,5 +30,15 @@
   "bugs": {
     "url": "https://github.com/jshacks/boilerplate/issues"
   },
-  "homepage": "https://github.com/jshacks/boilerplate#readme"
+  "homepage": "https://github.com/jshacks/boilerplate#readme",
+  "dependencies": {
+    "angular": "^1.5.8",
+    "angular-animate": "^1.5.8",
+    "angular-aria": "^1.5.8",
+    "angular-material": "^1.1.1",
+    "angular-ui-router": "^0.3.1",
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
+    "request": "^2.75.0"
+  }
 }
