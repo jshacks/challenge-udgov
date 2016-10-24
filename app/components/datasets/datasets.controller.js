@@ -21,7 +21,7 @@
         _self.watchers = {};
         _self.watchers.init = init;
 
-        function getDocumentData(document, event) {
+        function getDocumentData(dataset, document, event) {
             if(_self.data.supportedDocumentTypes.indexOf(document.format.toUpperCase()) < 0) {
                 $mdDialog.show(
                     $mdDialog.alert()
@@ -36,12 +36,7 @@
             }
 
             $http
-                .get('http://192.168.2.255:8001/api/document/' + document.id, {
-                    params: {
-                        url: document.romania_download_url,
-                        format: document.format
-                    }
-                })
+                .get('http://192.168.2.255:8001/api/package/' + dataset.id + '/resource/' + document.id)
                 .then(function (response) {
                     $mdDialog.show({
                         template:

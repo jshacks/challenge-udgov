@@ -40,7 +40,7 @@
 
     <div class="dataset-files" flex>
         <ul ng-repeat="resource in dVM.data.activeDataset.resources">
-            <li ng-click="dVM.actions.getDocumentData(resource, $event)">
+            <li ng-click="dVM.actions.getDocumentData(dVM.data.activeDataset, resource, $event)">
                 <i style="margin-right: 15px;" class="fa fa-file" aria-hidden="true"></i>{{ resource.format }} - {{ resource.name }}
             </li>
         </ul>

@@ -4,10 +4,54 @@ var q = require('q');
 var csv = require('csv-parser');
 var XLSX = require('node-xlsx');
 var parseString = require('xml2js').parseString;
+var request = require('request');
+var uuid = require('node-uuid');
 
+/**
+ * @param {uuid} package_id
+ * @param {uuid} resource_id
+ * @returns {promise}
+ */
+function getResource(package_id, resource_id) {
+    "use strict";
+
+    console.log('fetching resource metadata from data.gov.ro...');
+
+    var deffered = q.defer();
+    // @todo AA: at the moment the resource is not accessible directly by id
+    var _options = {
+        url: 'http://www.data.gov.ro/api/action/package_search?q=id:' + package_id,
+        json: true,
+        headers: {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.71 Safari/537.36'}
+    };
+
+    request.get(_options, function (error, response, data) {
+        if (data.result.results.length == 0) {
+            deffered.reject({status: 400, message: 'ERR_PACKAGE_NOT_FOUND'});
+        } else if (data.result.results.length > 1) {
+            deffered.reject({status: 400, message: 'ERR_TOO_MANY_PACKAGES'});
+        } else {
+            for (var i = 0; i < data.result.results[0].resources.length; i++) {
+                var _resource = data.result.results[0].resources[i];
+                if (_resource.id == resource_id) {
+                    deffered.resolve(_resource);
+                }
+            }
+
+            deffered.reject({status: 400, message: 'ERR_RESOURCE_NOT_FOUND'});
+        }
+    });
+
+    return deffered.promise;
+}
+
+/**
+ * @param fileName
+ * @param fileURI
+ * @returns {promise}
+ */
 function getFile(fileName, fileURI) {
     console.log('downloading file...');
-    if (fs.exists(fileName)) fs.unlinkSync(fileName);
     var deffered = q.defer();
 
     "use strict";
@@ -44,6 +88,7 @@ function parseCSV(file) {
             response.push(item);
         })
         .on('end', function () {
+            if (fs.exists(file)) fs.unlinkSync(file);
             deffered.resolve(response);
         });
 
@@ -52,6 +97,7 @@ function parseCSV(file) {
 function parseXLS(file) {
     "use strict";
 
+    console.log('parsing xls...');
     var deffered = q.defer();
     var workbook = XLSX.parse(file);
 
@@ -147,6 +193,7 @@ function parseXLS(file) {
         response = [];
     }
 
+    if (fs.exists(file)) fs.unlinkSync(file);
     deffered.resolve(response);
 
     return deffered.promise;
@@ -154,15 +201,17 @@ function parseXLS(file) {
 function parseXML(file) {
     "use strict";
 
+    console.log('parsing xml...');
     var deffered = q.defer();
 
     var fileOutput = fs.readFileSync(file);
 
     parseString(fileOutput, function (err, result) {
-        if(err){
+        if (err) {
             console.log(err);
         }
 
+        if (fs.exists(file)) fs.unlinkSync(file);
         deffered.resolve(result);
     });
 
@@ -200,13 +249,25 @@ function formatData(id, data) {
 this.getData = function (req, res) {
     "use strict";
 
-    var _id = req.params.id;
-    var _fileType = req.query.format.toUpperCase();
-    var _fileURI = req.query.url;
-    var _fileName = req.params.id;
+    if (!req.params.package_id) {
+        res.status(400).send('ERR_PACKAGE_ID_MISSING');
+    }
+    if (!req.params.resource_id) {
+        res.status(400).send('ERR_RESOURCE_ID_MISSING');
+    }
 
-    getFile(_fileName, _fileURI)
-        .then(function (file) {
+    var _file = null;
+    var _fileType = null;
+
+    getResource(req.params.package_id, req.params.resource_id)
+        .then(function (document) {
+            _fileType = document.format;
+            return getFile(uuid.v1(), document.romania_download_url);
+        }, function (error) {
+            res.status(error.status).send(error.message);
+        })
+        .then(function(file) {
+            _file = file;
             switch (_fileType) {
                 case 'CSV':
                     return parseCSV(file);
@@ -216,11 +277,11 @@ this.getData = function (req, res) {
                 case 'XML':
                     return parseXML(file);
                 default:
-                    break;
+                    res.status(400).send('ERR_CANNOT_PARSE_FORMAT');
             }
         })
         .then(function (data) {
-            return formatData(_id, data);
+            return formatData(req.params.resource_id, data);
         })
         .then(function (json) {
             res.send(json);
