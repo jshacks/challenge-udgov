@@ -7,6 +7,8 @@ var parseString = require('xml2js').parseString;
 var request = require('request');
 var uuid = require('node-uuid');
 
+var downloadFolder = 'server/downloads/';
+
 /**
  * @param {uuid} package_id
  * @param {uuid} resource_id
@@ -56,11 +58,11 @@ function getFile(fileName, fileURI) {
 
     "use strict";
 
-    var file = fs.createWriteStream(fileName);
+    var file = fs.createWriteStream(downloadFolder + fileName);
     http.get(fileURI, function (response) {
         response.pipe(file);
         file.on('finish', function () {
-            deffered.resolve(fileName);
+            deffered.resolve(downloadFolder + fileName);
         });
     }).on('error', function (err) { // Handle errors
 
@@ -88,7 +90,6 @@ function parseCSV(file) {
             response.push(item);
         })
         .on('end', function () {
-            if (fs.exists(file)) fs.unlinkSync(file);
             deffered.resolve(response);
         });
 
@@ -193,7 +194,6 @@ function parseXLS(file) {
         response = [];
     }
 
-    if (fs.exists(file)) fs.unlinkSync(file);
     deffered.resolve(response);
 
     return deffered.promise;
@@ -211,7 +211,6 @@ function parseXML(file) {
             console.log(err);
         }
 
-        if (fs.exists(file)) fs.unlinkSync(file);
         deffered.resolve(result);
     });
 
@@ -284,6 +283,8 @@ this.getData = function (req, res) {
             return formatData(req.params.resource_id, data);
         })
         .then(function (json) {
+            console.log('done.');
+            if(fs.existsSync(_file)) { fs.unlinkSync(_file); }
             res.send(json);
         });
 };
