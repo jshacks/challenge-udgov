@@ -1,36 +1,26 @@
 {
-  "name": "boilerplate",
+  "name": "udgov",
   "version": "0.1.0",
-  "description": "A JSHacks boilerplate for setting up projects in a consistent way",
-  "main": "src/index.js",
-  "directories": {
-    "doc": "docs"
-  },
+  "description": "Data unification for the romanian governmental data",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "echo \"Error: src/index.js is not configured\" && exit 1",
-    "release": "echo \"Error: release system is not configured\" && exit 1",
-    "lint": "echo \"Error: linting system is not configured\" && exit 1",
-    "build": "echo \"Error: build system is not configured\" && exit 1",
-    "bump-version": "echo \"Error: bump-version system is not configured\" && exit 1"
+    "start": "node server/server.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jshacks/boilerplate.git"
+    "url": "https://github.com/jshacks/challenge-udgov"
   },
   "keywords": [
     "jshacks",
-    "boilerplate",
-    "oss",
+    "data",
     "contributing",
     "community"
   ],
   "author": "JSHacks <contact@jshacks.io>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/jshacks/boilerplate/issues"
+    "url": "https://github.com/jshacks/challenge-udgov/issues"
   },
-  "homepage": "https://github.com/jshacks/boilerplate#readme",
+  "homepage": "https://github.com/jshacks/challenge-udgov/blob/master/README.md",
   "dependencies": {
     "angular": "^1.5.8",
     "angular-animate": "^1.5.8",
