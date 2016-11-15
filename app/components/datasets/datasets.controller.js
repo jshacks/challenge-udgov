@@ -13,6 +13,7 @@
         var _self = this;
 
         _self.data = {};
+        _self.data.api = "http://192.168.2.255:8001";
 
         _self.actions = {};
         _self.actions.setActiveDataset = setActiveDataset;
@@ -36,7 +37,7 @@
             }
 
             $http
-                .get('http://192.168.2.255:8001/api/package/' + dataset.id + '/resource/' + document.id)
+                .get(_self.data.api + '/api/package/' + dataset.id + '/resource/' + document.id)
                 .then(function (response) {
                     $mdDialog.show({
                         template:
@@ -88,7 +89,7 @@
             ];
 
             $http
-                .get('http://192.168.2.255:8001/api/datasets')
+                .get(_self.data.api + '/api/datasets')
                 .then(function (response) {
                     _self.data.datasets = response.data.results;
                     setActiveDataset(_self.data.datasets[0]);
