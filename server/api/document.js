@@ -58,6 +58,10 @@ function getFile(fileName, fileURI) {
 
     "use strict";
 
+    if(!fs.existsSync(downloadFolder)) {
+        fs.mkdirSync(downloadFolder);
+    }
+
     var file = fs.createWriteStream(downloadFolder + fileName);
     http.get(fileURI, function (response) {
         response.pipe(file);
