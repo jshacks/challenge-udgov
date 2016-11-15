@@ -7,7 +7,7 @@ var parseString = require('xml2js').parseString;
 var request = require('request');
 var uuid = require('node-uuid');
 
-var downloadFolder = 'server/downloads/';
+var downloadFolder = './downloads/';
 
 /**
  * @param {uuid} package_id
