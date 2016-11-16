@@ -12,15 +12,24 @@ section {
 
 section.main {
     position: fixed;
-    top: 66px;
+    top: 65px;
     right: 0;
     bottom: 0;
     left: 0;
 
     width: 100%;
-    height: 100%;
+    height: calc(100% - 65px);
 }
 
-ul li {
-    list-style: none;
+.light-style {
+    color: rgba(45,45,45,1);
+    background-color: rgba(255,255,255,1);
+}
+.dark-style {
+    background-color: rgba(45,45,45,1);
+    color: rgba(255,255,255,1);
+}
+
+md-toolbar {
+    height: 65px;
 }

@@ -33,7 +33,7 @@
                 url: '/datasets',
                 views: {
                     main: {
-                        templateUrl: 'components/datasets/datasets.html'
+                        templateUrl: 'components/datasets/datasets.view.html'
                     }
                 }
             });

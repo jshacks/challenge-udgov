@@ -3,7 +3,9 @@
 
     angular
         .module('app', [
+            'ngSanitize',
             'ui.router',
-            'ngMaterial'
+            'ngMaterial',
+            'jsonFormatter'
         ]);
 })();

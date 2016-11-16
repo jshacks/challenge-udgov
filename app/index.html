@@ -11,18 +11,20 @@
     <title>UD-GOV</title>
     <!-- styles -->
     <link rel="stylesheet" href="./../node_modules/angular-material/angular-material.css">
+    <link rel="stylesheet" href="./../node_modules/jsonformatter/dist/json-formatter.css">
     <link rel="stylesheet" href="./app.css">
-    <link rel="stylesheet" href="./components/datasets/datasets.css">
+    <link rel="stylesheet" href="./common/components/app-loader/app-loader.style.css">
+    <link rel="stylesheet" href="./components/datasets/datasets.style.css">
     <!-- /styles -->
 
     <!--FontAwesome -->
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 </head>
 <body ng-cloak>
-    <md-toolbar md-scroll-shrink ng-if="true" >
+    <md-toolbar>
         <div class="md-toolbar-tools">
             <h3>
-                <i class="fa fa-compress" aria-hidden="true"></i>
+                <i class="fa fa-compress"></i>
                 <span>Unify DataGov</span>
             </h3>
         </div>
@@ -32,16 +34,19 @@
 
     <!-- scripts -->
     <script type="application/javascript" src="./../node_modules/angular/angular.js"></script>
+    <script type="application/javascript" src="./../node_modules/angular-sanitize/angular-sanitize.js"></script>
     <script type="application/javascript" src="./../node_modules/angular-ui-router/release/angular-ui-router.js"></script>
     <script type="application/javascript" src="./../node_modules/angular-aria/angular-aria.js"></script>
     <script type="application/javascript" src="./../node_modules/angular-animate/angular-animate.js"></script>
     <script type="application/javascript" src="./../node_modules/angular-material/angular-material.js"></script>
+    <script type="application/javascript" src="./../node_modules/jsonformatter/dist/json-formatter.js"></script>
     <!-- /scripts -->
 
     <!-- app -->
     <script type="application/javascript" src="./app.js"></script>
-    <script type="application/javascript" src="./filters/split.filter.js"></script>
-    <script type="application/javascript" src="./config/router.config.js"></script>
+    <script type="application/javascript" src="./common/components/app-loader/app-loader.directive.js"></script>
+    <script type="application/javascript" src="./common/filters/split.filter.js"></script>
+    <script type="application/javascript" src="./common/config/router.config.js"></script>
     <script type="application/javascript" src="./components/datasets/datasets.controller.js"></script>
     <!-- /app -->
 </body>

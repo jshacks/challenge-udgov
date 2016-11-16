@@ -1,0 +1,47 @@
+<section id="datasets-page"
+         ng-controller="DatasetsController as dVM"
+         app-loader="dVM.loaders.page">
+
+    <div class="datasets-wrapper" layout="row" layout-wrap>
+        <div class="datasets light-style" flex="33">
+            <md-content>
+                <md-list>
+                    <md-virtual-repeat-container>
+                        <md-list-item md-virtual-repeat="dataset in dVM.data.datasets"
+                                      ng-class="{ 'dark-style': dVM.watchers.getActiveDataset(dataset)  }"
+                                      ng-click="dVM.actions.setActiveDataset(dataset)">
+
+                            <span>{{ dataset.title }}</span>
+
+                        </md-list-item>
+                    </md-virtual-repeat-container>
+                </md-list>
+            </md-content>
+        </div>
+
+        <div class="dataset-info dark-style" flex="33">
+            <div class="info-title">{{ dVM.data.activeDataset.title }}</div>
+
+            <div class="info-item"
+                 ng-repeat="info in dVM.data.datasetInfoEnum"
+                 ng-if="dVM.data.activeDataset[info]">
+
+                <div class="info-label">{{ info | replace:'_':' ' | uppercase }}:</div>
+                <div class="info-data">{{ dVM.data.activeDataset[info] }}</div>
+
+            </div>
+        </div>
+
+        <div class="dataset-resources dark-style" flex="33">
+            <div class="resource-title">RESOURCES</div>
+
+            <div class="resource-item"
+                 ng-repeat="resource in dVM.data.activeDataset.resources"
+                 ng-click="dVM.actions.getDocumentData(dVM.data.activeDataset, resource, $event)">
+
+                {{ resource.format }} - {{ resource.name }}
+
+            </div>
+        </div>
+    </div>
+</section>
