@@ -13,8 +13,8 @@
         var _self = this;
 
         _self.data = {};
-        // _self.data.api = "http://138.68.87.126:8000";
-        _self.data.api = "http://localhost:8000";
+        _self.data.api = "http://138.68.87.126:8000";
+        // _self.data.api = "http://localhost:8000";
 
         _self.actions = {};
         _self.actions.setActiveDataset = setActiveDataset;
