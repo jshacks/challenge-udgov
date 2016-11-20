@@ -7,7 +7,7 @@
             <md-content>
                 <md-list>
                     <md-virtual-repeat-container>
-                        <md-list-item md-virtual-repeat="dataset in dVM.data.datasets"
+                        <md-list-item md-virtual-repeat="dataset in dVM.data.datasets" md-on-demand
                                       ng-class="{ 'dark-style': dVM.watchers.getActiveDataset(dataset)  }"
                                       ng-click="dVM.actions.setActiveDataset(dataset)">
 

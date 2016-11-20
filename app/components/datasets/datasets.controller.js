@@ -15,6 +15,55 @@
         _self.data = {};
         _self.data.api = "http://138.68.87.126:8000";
         // _self.data.api = "http://localhost:8000";
+        _self.data.datasets = {
+            numLoaded_: 0,
+            maxLoad_: 0,
+            items: [],
+
+            getItemAtIndex: function (index) {
+                var _indexOutOfList = index > _self.data.datasets.numLoaded_;
+                var _hasItemsToLoad = _self.data.datasets.numLoaded_ != _self.data.datasets.maxLoad_;
+                var _loading = _self.loaders.more;
+
+                if (_indexOutOfList && _hasItemsToLoad && !_loading) {
+                    _self.data.datasets.fetchMoreItems_();
+                    return null;
+                }
+
+                return _self.data.datasets.items[index];
+            },
+
+            getLength: function () {
+                return _self.data.datasets.numLoaded_ + 5;
+            },
+
+            fetchMoreItems_: function () {
+                var _loadedAll = _self.data.datasets.numLoaded_ == _self.data.datasets.maxLoad_;
+                var _loading = _self.loaders.more;
+
+                if (!_loadedAll || !_loading) {
+                    _self.loaders.more = true;
+
+                    $http
+                        .get(_self.data.api + '/api/datasets', {
+                            params: {
+                                offset: _self.data.datasets.numLoaded_
+                            }
+                        })
+                        .then(function (response) {
+                            for (var i = 0; i < response.data.results.length; i++) {
+                                _self.data.datasets.items.push(response.data.results[i]);
+                            }
+                            _self.data.datasets.numLoaded_ = _self.data.datasets.items.length;
+                            if (_self.data.datasets[0] && !_self.data.activeDataset) setActiveDataset(_self.data.datasets[0]);
+                        })
+                        .then(function () {
+                            _self.loaders.more = false;
+                            _self.loaders.page = false;
+                        });
+                }
+            }
+        };
 
         _self.actions = {};
         _self.actions.setActiveDataset = setActiveDataset;
@@ -53,13 +102,13 @@
             $mdDialog.show({
                 template: [
                     '<section id="resource-dialog">',
-                        '<md-toolbar layout="row">',
-                            '<div flex class="resource-url" layout="row" layout-align="center center"><span>{{ url }}</span></div>',
-                        '</md-toolbar>',
-                        '<md-content app-loader="loaders.resource">',
-                            '<div class="resource-viewer-container">',
-                                '<json-formatter class="resource-viewer" json="json" open="5"></json-formatter>',
-                            '</div>',
+                    '<md-toolbar layout="row">',
+                    '<div flex class="resource-url" layout="row" layout-align="center center"><span>{{ url }}</span></div>',
+                    '</md-toolbar>',
+                    '<md-content app-loader="loaders.resource">',
+                    '<div class="resource-viewer-container">',
+                    '<json-formatter class="resource-viewer" json="json" open="5"></json-formatter>',
+                    '</div>',
                     '</md-content>',
                     '</section>'
                 ].join(''),
@@ -102,11 +151,12 @@
         }
 
         function getActiveDataset(dataset) {
-            return _self.data.activeDataset.id == dataset.id;
+            return _self.data.activeDataset && dataset && _self.data.activeDataset.id == dataset.id;
         }
 
         _self.$onInit = function () {
             _self.loaders.page = true;
+            _self.loaders.more = true;
 
             _self.data.datasetInfoEnum = [
                 'notes',
@@ -124,13 +174,22 @@
             ];
 
             $http
-                .get(_self.data.api + '/api/datasets')
+                .get(_self.data.api + '/api/datasets', {
+                    params: {
+                        offset: _self.data.datasets.numLoaded_
+                    }
+                })
                 .then(function (response) {
-                    _self.data.datasets = response.data.results;
-                    setActiveDataset(_self.data.datasets[0]);
+                    _self.data.datasets.maxLoad_ = response.data.count;
+                    _self.data.datasets.numLoaded_ = 20;
+                    for (var i = 0; i < response.data.results.length; i++) {
+                        _self.data.datasets.items.push(response.data.results[i]);
+                    }
+                    if (_self.data.datasets.items[0] && !_self.data.activeDataset) setActiveDataset(_self.data.datasets.items[0]);
                 })
                 .then(function () {
                     _self.loaders.page = false;
+                    _self.loaders.more = false;
                 });
         }
     }
